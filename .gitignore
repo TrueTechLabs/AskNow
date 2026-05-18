@@ -1,0 +1,49 @@
+openspec
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Xcode
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# Build products
+*.app
+*.dSYM/
+*.ipa
+*.pkg
+
+# Local configuration and secrets
+.env
+.env.*
+*.local
+*.secret
+*.key
+*.pem
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Editor / IDE
+.vscode/
+.idea/
+.home/
+*.swp
+*.swo
+
+# Codex / local agent state
+.codex/
