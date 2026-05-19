@@ -28,11 +28,15 @@ enum AppText {
     static var settingsTitle: String { choose("AskNow 设置", "AskNow Settings") }
     static var copyLastAnswer: String { choose("复制上一条回答", "Copy last answer") }
     static var copy: String { choose("复制", "Copy") }
+    static var copied: String { choose("已复制", "Copied") }
     static var cut: String { choose("剪切", "Cut") }
     static var paste: String { choose("粘贴", "Paste") }
     static var selectAll: String { choose("全选", "Select All") }
     static var clearSession: String { choose("清空会话", "Clear session") }
     static var close: String { choose("关闭", "Close") }
+    static var stop: String { choose("停止", "Stop") }
+    static var pinWindow: String { choose("置顶窗口", "Pin window") }
+    static var unpinWindow: String { choose("取消置顶", "Unpin window") }
     static var ready: String { choose("准备就绪", "Ready") }
     static var emptyHint: String { choose("输入问题、粘贴要翻译的内容，或切换上方模式。", "Ask a question, paste text to translate, or switch modes above.") }
     static var typePlaceholder: String { choose("输入问题或粘贴内容...", "Type a question or paste content...") }

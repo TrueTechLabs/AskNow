@@ -172,6 +172,50 @@ Sources/AskNow/
 - More native provider adapters
 - Auto-update support
 
+---
+
+## Web Client
+
+AskNow also provides a browser-based PWA client in the `web/` directory. It mirrors the macOS app's core experience: prompt modes, isolated conversations, OpenAI-compatible streaming, and responsive desktop/mobile layouts.
+
+### Web Development
+
+```bash
+cd web
+npm install
+npm run dev        # Start dev server at http://localhost:5173
+npm run build      # Production build to web/dist/
+npm run preview    # Preview production build locally
+```
+
+### Static Deployment
+
+The `web/dist/` directory is a fully static site. Deploy it to any static hosting service (Vercel, Netlify, Cloudflare Pages, GitHub Pages, S3, etc.):
+
+```bash
+cd web
+npm run build
+# Upload web/dist/ to your static host
+```
+
+No server-side runtime, API proxy, or build step is required on the host.
+
+### Security Notes
+
+- **API keys** are stored only in the current browser's IndexedDB. They are never uploaded to any AskNow server.
+- API keys are sent directly from the browser to your configured provider endpoint.
+- Some providers reject browser requests due to **CORS policies**. If you see a CORS error, use a CORS-enabled provider (e.g., OpenRouter, Together AI), a local proxy (e.g., Ollama, LiteLLM), or a provider that explicitly allows browser requests.
+- For maximum security, use provider API keys with scoped permissions and rotate them regularly.
+
+### Tech Stack
+
+- React 19, TypeScript, Vite
+- Tailwind CSS v4
+- Zustand for state management
+- Dexie / IndexedDB for browser persistence
+- vite-plugin-pwa for service worker and installability
+- Lucide React for icons
+
 <p align="center">
   <b>Small window. Fast answers. Back to flow.</b><br>
   <b>小窗口，快回答，马上回到心流。</b>

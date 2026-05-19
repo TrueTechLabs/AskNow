@@ -13,6 +13,7 @@ final class ChatViewModel: ObservableObject {
         }
     }
     @Published var isStreaming = false
+    @Published var isPanelPinned = false
     @Published var errorMessage: String?
     @Published var inputFocusToken = UUID()
 
@@ -86,6 +87,10 @@ final class ChatViewModel: ObservableObject {
         streamTask?.cancel()
         streamTask = nil
         isStreaming = false
+    }
+
+    func togglePanelPinned() {
+        isPanelPinned.toggle()
     }
 
     func clear() {
