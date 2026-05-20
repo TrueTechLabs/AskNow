@@ -24,7 +24,11 @@
 ### 项目介绍
 
 AskNow 是一个面向 macOS 的轻量 AI 助手，不到2MB。它常驻在菜单栏中，通过快捷键或菜单栏图标呼出居中浮窗，让用户在当前工作流里快速完成问答、翻译、总结、润色、代码解释等高频任务。
+
+
 <img src="https://truetechlabs-1259203851.cos.ap-shanghai.myqcloud.com/202605202303576.png" alt="AskNow 主界面" width="500">
+
+
 项目包含两个实现：
 
 - `Sources/AskNow/`：原生 macOS 应用，使用 Swift、AppKit 和 SwiftUI 构建。
