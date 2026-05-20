@@ -17,7 +17,8 @@ struct KeychainStore {
         return String(data: data, encoding: .utf8)
     }
 
-    func save(_ value: String, account: String) {
+    @discardableResult
+    func save(_ value: String, account: String) -> Bool {
         let data = Data(value.utf8)
         var query = baseQuery(account: account)
         query[kSecUseAuthenticationContext as String] = nonInteractiveContext()
@@ -31,12 +32,15 @@ struct KeychainStore {
             query.removeValue(forKey: kSecUseAuthenticationContext as String)
             query[kSecValueData as String] = data
             query[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-            SecItemAdd(query as CFDictionary, nil)
+            return SecItemAdd(query as CFDictionary, nil) == errSecSuccess
         }
+        return status == errSecSuccess
     }
 
-    func delete(account: String) {
-        SecItemDelete(baseQuery(account: account) as CFDictionary)
+    @discardableResult
+    func delete(account: String) -> Bool {
+        let status = SecItemDelete(baseQuery(account: account) as CFDictionary)
+        return status == errSecSuccess || status == errSecItemNotFound
     }
 
     private func baseQuery(account: String) -> [String: Any] {

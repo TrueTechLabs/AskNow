@@ -19,12 +19,19 @@ final class ChatViewModel: ObservableObject {
 
     let settingsStore: SettingsStore
     private let provider: AIProvider
+    private let conversationStore: ConversationStore
     private var streamTask: Task<Void, Never>?
 
-    init(settingsStore: SettingsStore, provider: AIProvider = OpenAICompatibleProvider()) {
+    init(
+        settingsStore: SettingsStore,
+        provider: AIProvider = OpenAICompatibleProvider(),
+        conversationStore: ConversationStore = ConversationStore()
+    ) {
         self.settingsStore = settingsStore
         self.provider = provider
+        self.conversationStore = conversationStore
         self.selectedPromptModeID = settingsStore.settings.defaultPromptModeID
+        self.conversations = conversationStore.load()
     }
 
     var promptModes: [PromptMode] {
@@ -50,6 +57,7 @@ final class ChatViewModel: ObservableObject {
         let assistantMessage = ChatMessage(role: .assistant, content: "", sourceUserMessageID: userMessage.id)
         append(userMessage)
         append(assistantMessage)
+        saveConversations()
 
         streamResponse(into: assistantMessage.id, requestMessages: composeMessages(for: assistantMessage.id))
     }
@@ -81,12 +89,14 @@ final class ChatViewModel: ObservableObject {
                 messages.removeAll { $0.sourceUserMessageID == message.id }
             }
         }
+        saveConversations()
     }
 
     func cancelStreaming() {
         streamTask?.cancel()
         streamTask = nil
         isStreaming = false
+        saveConversations()
     }
 
     func togglePanelPinned() {
@@ -99,6 +109,7 @@ final class ChatViewModel: ObservableObject {
         errorMessage = nil
         input = ""
         focusInput()
+        saveConversations()
     }
 
     func copyLastAnswer() {
@@ -140,6 +151,7 @@ final class ChatViewModel: ObservableObject {
                 await MainActor.run {
                     self.isStreaming = false
                     self.streamTask = nil
+                    self.saveConversations()
                 }
             } catch {
                 await MainActor.run {
@@ -147,6 +159,7 @@ final class ChatViewModel: ObservableObject {
                     self.streamTask = nil
                     self.errorMessage = error.localizedDescription
                     self.setMessageContent(id: assistantID, content: "")
+                    self.saveConversations()
                 }
             }
         }
@@ -204,5 +217,9 @@ final class ChatViewModel: ObservableObject {
         var messages = conversations[selectedPromptModeID] ?? []
         transform(&messages)
         conversations[selectedPromptModeID] = messages
+    }
+
+    private func saveConversations() {
+        conversationStore.save(conversations)
     }
 }
