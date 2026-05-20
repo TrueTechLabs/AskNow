@@ -4,7 +4,7 @@ import { t, getModeName, getPlaceholder } from '../i18n'
 import { streamChat, composeMessages, StreamingError } from '../lib/streaming'
 import { copyRawMessageContent } from '../lib/clipboard'
 import type { ChatMessage } from '../models/types'
-import { Copy, Trash2, RefreshCw, Settings, X, Send, Maximize2, Minimize2 } from 'lucide-react'
+import { Copy, Trash2, RefreshCw, Settings, X, Send, Maximize2, Minimize2, Moon, Sun } from 'lucide-react'
 import { MarkdownMessage } from './MarkdownMessage'
 
 const SettingsPanel = lazy(() => import('./Settings'))
@@ -14,7 +14,7 @@ export default function App() {
     settings, promptModes, modelProfiles, hydrated,
     activePromptModeID, setActivePromptMode,
     getConversation, addMessage, updateMessage, removeMessage, clearConversation,
-    getAPIKey, setSettingsOpen, settingsOpen,
+    getAPIKey, setSettingsOpen, settingsOpen, setSettings,
   } = useAppStore()
 
   const [input, setInput] = useState('')
@@ -131,9 +131,12 @@ export default function App() {
 
   const modeColor = activeMode.colorHex
   const expandLabel = expanded ? t('restoreWindow', lang) : t('maximizeWindow', lang)
+  const isDark = settings.theme === 'dark'
+  const themeLabel = isDark ? t('switchToLight', lang) : t('switchToDark', lang)
 
   return (
-    <div className={`asknow-shell${expanded ? ' asknow-shell-expanded' : ''}`}>
+    <div className={`asknow-app asknow-theme-${settings.theme}`}>
+      <div className={`asknow-shell${expanded ? ' asknow-shell-expanded' : ''}`}>
       {/* Header */}
       <header className="asknow-header">
         <div className="flex items-center gap-2">
@@ -145,6 +148,14 @@ export default function App() {
           <span className="asknow-title">AskNow</span>
         </div>
         <div className="flex items-center gap-1">
+          <button
+            onClick={() => setSettings({ theme: isDark ? 'light' : 'dark' })}
+            className="asknow-icon-btn"
+            title={themeLabel}
+            aria-label={themeLabel}
+          >
+            {isDark ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
           <button onClick={handleClear} className="asknow-icon-btn" title={t('clear', lang)}>
             <Trash2 size={15} />
           </button>
@@ -171,7 +182,7 @@ export default function App() {
             className="asknow-mode-btn"
             style={{
               backgroundColor: mode.id === activePromptModeID ? mode.colorHex + '2e' : 'transparent',
-              color: mode.id === activePromptModeID ? mode.colorHex : '#888',
+              color: mode.id === activePromptModeID ? mode.colorHex : 'var(--asknow-text-subtle)',
               borderColor: mode.id === activePromptModeID ? mode.colorHex : 'transparent',
             }}
           >
@@ -284,6 +295,7 @@ export default function App() {
           <SettingsPanel onClose={() => setSettingsOpen(false)} />
         </Suspense>
       )}
+      </div>
     </div>
   )
 }

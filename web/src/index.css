@@ -16,6 +16,30 @@ body {
 #root {
   width: 100%;
   min-height: 100dvh;
+}
+
+.asknow-app {
+  --asknow-bg: #ffffff;
+  --asknow-page-bg: #f0f0f0;
+  --asknow-text: #1d1d1f;
+  --asknow-text-muted: #6e6e73;
+  --asknow-text-subtle: #999;
+  --asknow-border: rgba(0, 0, 0, 0.08);
+  --asknow-border-soft: rgba(0, 0, 0, 0.04);
+  --asknow-hover: rgba(0, 0, 0, 0.05);
+  --asknow-hover-strong: rgba(0, 0, 0, 0.1);
+  --asknow-input-bg: #f5f5f7;
+  --asknow-input-border: #e0e0e0;
+  --asknow-input-focus: #b0b0b0;
+  --asknow-user-bg: rgba(0, 122, 255, 0.1);
+  --asknow-assistant-text: #444;
+  --asknow-link: #006adc;
+  --asknow-code-bg: rgba(0, 0, 0, 0.07);
+  --asknow-code-block-bg: #f5f5f7;
+  --asknow-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--asknow-page-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,17 +50,38 @@ body {
 .asknow-shell {
   width: 680px;
   height: 560px;
-  background: #ffffff;
+  background: var(--asknow-bg);
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--asknow-shadow);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   font-size: 12px;
-  color: #1d1d1f;
+  color: var(--asknow-text);
   font-size: 13px;
   position: relative;
+}
+
+.asknow-theme-dark {
+  --asknow-bg: #151618;
+  --asknow-page-bg: #0f1012;
+  --asknow-text: #f4f4f5;
+  --asknow-text-muted: #b2b4ba;
+  --asknow-text-subtle: #8d9098;
+  --asknow-border: rgba(255, 255, 255, 0.12);
+  --asknow-border-soft: rgba(255, 255, 255, 0.08);
+  --asknow-hover: rgba(255, 255, 255, 0.08);
+  --asknow-hover-strong: rgba(255, 255, 255, 0.13);
+  --asknow-input-bg: #202226;
+  --asknow-input-border: #34363d;
+  --asknow-input-focus: #555964;
+  --asknow-user-bg: rgba(64, 156, 255, 0.18);
+  --asknow-assistant-text: #dddfe4;
+  --asknow-link: #70b7ff;
+  --asknow-code-bg: rgba(255, 255, 255, 0.1);
+  --asknow-code-block-bg: #202226;
+  --asknow-shadow: 0 10px 36px rgba(0, 0, 0, 0.38), 0 1px 5px rgba(0, 0, 0, 0.32);
 }
 
 .asknow-shell-expanded {
@@ -48,7 +93,7 @@ body {
 
 /* On mobile, go full screen */
 @media (max-width: 480px) {
-  #root {
+  .asknow-app {
     align-items: stretch;
     justify-content: stretch;
   }
@@ -67,15 +112,15 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--asknow-border);
   flex-shrink: 0;
 }
 
 .asknow-title {
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #1d1d1f;
+  letter-spacing: 0;
+  color: var(--asknow-text);
 }
 
 .asknow-icon-btn {
@@ -84,12 +129,12 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  color: #999;
+  color: var(--asknow-text-subtle);
   transition: all 0.15s;
 }
 .asknow-icon-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #666;
+  background: var(--asknow-hover);
+  color: var(--asknow-text-muted);
 }
 
 /* ---- Mode Selector ---- */
@@ -100,7 +145,7 @@ body {
   padding: 10px 16px;
   overflow-x: auto;
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid var(--asknow-border-soft);
 }
 
 .asknow-mode-btn {
@@ -142,7 +187,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #aaa;
+  color: var(--asknow-text-subtle);
   font-size: 13px;
   text-align: center;
   line-height: 1.5;
@@ -166,12 +211,12 @@ body {
   overflow-wrap: anywhere;
 }
 .asknow-bubble-user {
-  background: rgba(0, 122, 255, 0.1);
-  color: #1d1d1f;
+  background: var(--asknow-user-bg);
+  color: var(--asknow-text);
 }
 .asknow-bubble-assistant {
   background: transparent;
-  color: #444;
+  color: var(--asknow-assistant-text);
 }
 
 .asknow-bubble > :first-child {
@@ -208,18 +253,18 @@ body {
 .asknow-bubble blockquote {
   margin: 0.45em 0;
   padding: 0.1em 0 0.1em 0.75em;
-  border-left: 2px solid rgba(0, 0, 0, 0.18);
-  color: #666;
+  border-left: 2px solid var(--asknow-border);
+  color: var(--asknow-text-muted);
 }
 .asknow-bubble a {
-  color: #006adc;
+  color: var(--asknow-link);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .asknow-bubble code {
   padding: 1px 4px;
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.07);
+  background: var(--asknow-code-bg);
   font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
   font-size: 12px;
   word-break: break-word;
@@ -228,9 +273,9 @@ body {
   max-width: 100%;
   margin: 0.45em 0 0.6em;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--asknow-border);
   border-radius: 6px;
-  background: #f5f5f7;
+  background: var(--asknow-code-block-bg);
 }
 .asknow-code-header {
   display: flex;
@@ -238,8 +283,8 @@ body {
   justify-content: space-between;
   gap: 8px;
   padding: 5px 8px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-  color: #6e6e73;
+  border-bottom: 1px solid var(--asknow-border-soft);
+  color: var(--asknow-text-muted);
   font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
   font-size: 11px;
 }
@@ -251,13 +296,13 @@ body {
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: #8a8a8e;
+  color: var(--asknow-text-subtle);
   cursor: pointer;
   font: inherit;
 }
 .asknow-code-copy:hover {
-  background: rgba(0, 0, 0, 0.06);
-  color: #555;
+  background: var(--asknow-hover);
+  color: var(--asknow-text-muted);
 }
 .asknow-code-block pre {
   max-width: 100%;
@@ -322,12 +367,12 @@ body {
 .asknow-bubble th,
 .asknow-bubble td {
   padding: 4px 6px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--asknow-border);
   text-align: left;
   vertical-align: top;
 }
 .asknow-bubble th {
-  background: rgba(0, 0, 0, 0.04);
+  background: var(--asknow-hover);
   font-weight: 650;
 }
 .asknow-bubble input[type="checkbox"] {
@@ -339,7 +384,7 @@ body {
   display: inline-block;
   width: 5px;
   height: 15px;
-  background: #999;
+  background: var(--asknow-text-subtle);
   animation: blink 1s step-end infinite;
   vertical-align: text-bottom;
   margin-left: 1px;
@@ -365,12 +410,12 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  color: #bbb;
+  color: var(--asknow-text-subtle);
   transition: all 0.15s;
 }
 .asknow-action-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #888;
+  background: var(--asknow-hover);
+  color: var(--asknow-text-muted);
 }
 
 /* ---- Error ---- */
@@ -392,7 +437,7 @@ body {
 .asknow-composer {
   flex-shrink: 0;
   padding: 10px 16px 14px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid var(--asknow-border-soft);
 }
 
 @media (max-width: 480px) {
@@ -403,12 +448,12 @@ body {
 
 .asknow-input {
   flex: 1;
-  background: #f5f5f7;
-  border: 1px solid #e0e0e0;
+  background: var(--asknow-input-bg);
+  border: 1px solid var(--asknow-input-border);
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 13px;
-  color: #1d1d1f;
+  color: var(--asknow-text);
   resize: none;
   outline: none;
   font-family: inherit;
@@ -418,10 +463,10 @@ body {
   transition: border-color 0.15s;
 }
 .asknow-input::placeholder {
-  color: #aaa;
+  color: var(--asknow-text-subtle);
 }
 .asknow-input:focus {
-  border-color: #b0b0b0;
+  border-color: var(--asknow-input-focus);
 }
 .asknow-input:disabled {
   opacity: 0.5;
@@ -430,15 +475,15 @@ body {
 .asknow-cancel-btn {
   padding: 5px;
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--asknow-hover);
   border: none;
   cursor: pointer;
-  color: #666;
+  color: var(--asknow-text-muted);
   flex-shrink: 0;
   transition: background 0.15s;
 }
 .asknow-cancel-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--asknow-hover-strong);
 }
 
 .asknow-send-btn {
@@ -470,24 +515,24 @@ body {
 
 .input-field {
   width: 100%;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
+  background: var(--asknow-bg, #ffffff);
+  border: 1px solid var(--asknow-input-border, #e0e0e0);
   border-radius: 8px;
   padding: 6px 10px;
   font-size: 12px;
-  color: #1d1d1f;
+  color: var(--asknow-text, #1d1d1f);
   outline: none;
   transition: border-color 0.15s;
 }
 .input-field:focus {
-  border-color: #b0b0b0;
+  border-color: var(--asknow-input-focus, #b0b0b0);
 }
 .input-field:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 .input-field::placeholder {
-  color: #999;
+  color: var(--asknow-text-subtle, #999);
 }
 
 select.input-field {
@@ -501,4 +546,45 @@ select.input-field {
 textarea.input-field {
   font-family: inherit;
   line-height: 1.5;
+}
+
+/* ---- Settings panel theme overrides ---- */
+
+.asknow-settings-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.asknow-settings-panel {
+  background: var(--asknow-bg);
+  color: var(--asknow-text);
+}
+
+.asknow-theme-dark .asknow-settings-panel .border-gray-100,
+.asknow-theme-dark .asknow-settings-panel .border-gray-50 {
+  border-color: var(--asknow-border);
+}
+
+.asknow-theme-dark .asknow-settings-panel .bg-gray-50,
+.asknow-theme-dark .asknow-settings-panel .bg-gray-100 {
+  background-color: var(--asknow-input-bg);
+}
+
+.asknow-theme-dark .asknow-settings-panel .bg-gray-200 {
+  background-color: var(--asknow-hover-strong);
+}
+
+.asknow-theme-dark .asknow-settings-panel .hover\:bg-gray-100:hover,
+.asknow-theme-dark .asknow-settings-panel .hover\:bg-gray-200:hover {
+  background-color: var(--asknow-hover);
+}
+
+.asknow-theme-dark .asknow-settings-panel .text-gray-900,
+.asknow-theme-dark .asknow-settings-panel .text-gray-700,
+.asknow-theme-dark .asknow-settings-panel .text-gray-600 {
+  color: var(--asknow-text);
+}
+
+.asknow-theme-dark .asknow-settings-panel .text-gray-500,
+.asknow-theme-dark .asknow-settings-panel .text-gray-400 {
+  color: var(--asknow-text-subtle);
 }

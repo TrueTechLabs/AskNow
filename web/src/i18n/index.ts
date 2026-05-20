@@ -2,6 +2,8 @@ import type { AppLanguage } from '../models/types'
 
 const zh: Record<string, string> = {
   settings: '设置',
+  switchToDark: '切换到深色模式',
+  switchToLight: '切换到浅色模式',
   promptModes: '提示词模式',
   modelProfiles: '模型配置',
   provider: '供应商',
@@ -60,6 +62,8 @@ const zh: Record<string, string> = {
 
 const en: Record<string, string> = {
   settings: 'Settings',
+  switchToDark: 'Switch to dark mode',
+  switchToLight: 'Switch to light mode',
   promptModes: 'Prompt Modes',
   modelProfiles: 'Model Profiles',
   provider: 'Provider',

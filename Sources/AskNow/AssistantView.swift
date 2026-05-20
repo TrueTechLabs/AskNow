@@ -61,7 +61,7 @@ struct AssistantView: View {
             .help(AppText.clearSession)
 
         }
-        .padding(.leading, 76)
+        .padding(.leading, 16)
         .padding(.trailing, 16)
         .padding(.vertical, 12)
     }
@@ -280,15 +280,17 @@ private struct MarkdownMessageText: View {
     }
 
     private func markdownText(_ value: String) -> AttributedString {
+        let normalized = replaceInlineMath(in: value)
+
         do {
             return try AttributedString(
-                markdown: value,
+                markdown: normalized,
                 options: AttributedString.MarkdownParsingOptions(
                     interpretedSyntax: .full
                 )
             )
         } catch {
-            return AttributedString(value)
+            return AttributedString(normalized)
         }
     }
 
@@ -325,17 +327,10 @@ private struct MarkdownMessageText: View {
                 continue
             }
 
-            if let match = mathRange(in: value, from: index, opening: "\\(", closing: "\\)") {
-                flushText()
-                segments.append(MarkdownSegment(kind: .math, content: String(value[match])))
-                index = match.upperBound
-                continue
-            }
-
             if value[index] == "$",
+               !value[index...].hasPrefix("$$"),
                let end = value[value.index(after: index)...].firstIndex(of: "$") {
-                flushText()
-                segments.append(MarkdownSegment(kind: .math, content: String(value[index...end])))
+                textBuffer.append(prettifyMathSource(String(value[value.index(after: index)..<end])))
                 index = value.index(after: end)
                 continue
             }
@@ -421,36 +416,96 @@ private struct MarkdownMessageText: View {
     }
 
     private func prettifyMathSource(_ value: String) -> String {
-        var result = replaceFractions(in: value)
+        var result = replaceInlineMath(in: value)
+        result = replaceFractions(in: result)
         result = replaceTextCommands(in: result)
+        result = replaceMathCommands(in: result)
 
-        let replacements: [(String, String)] = [
-            ("\\cdot", "·"),
-            ("\\times", "×"),
-            ("\\div", "÷"),
-            ("\\pm", "±"),
-            ("\\leq", "≤"),
-            ("\\geq", "≥"),
-            ("\\neq", "≠"),
-            ("\\approx", "≈"),
-            ("\\to", "→"),
-            ("\\rightarrow", "→"),
-            ("\\left", ""),
-            ("\\right", ""),
-            ("\\,", " "),
-            ("\\;", " "),
-            ("\\:", " "),
-            ("\\ ", " "),
-            ("\\neg", "¬")
-        ]
+        return result
+            .replacingOccurrences(of: #"\^\{([^{}]+)\}"#, with: "^$1", options: .regularExpression)
+            .replacingOccurrences(of: #"_\{([^{}]+)\}"#, with: "_$1", options: .regularExpression)
+            .replacingOccurrences(of: #"([A-Za-z0-9)])\s*mod\s*\{([^}]+)\}"#, with: "$1 mod $2", options: .regularExpression)
+            .replacingOccurrences(of: #"\{([^{}]+)\}"#, with: "$1", options: .regularExpression)
+            .replacingOccurrences(of: #" {2,}"#, with: " ", options: .regularExpression)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 
-        for (target, replacement) in replacements {
-            result = result.replacingOccurrences(of: target, with: replacement)
+    private func replaceInlineMath(in value: String) -> String {
+        var result = value
+
+        while let range = result.range(of: "\\("),
+              let closingRange = result[range.upperBound...].range(of: "\\)") {
+            let formula = String(result[range.upperBound..<closingRange.lowerBound])
+            let replacement = prettifyMathSourceWithoutInlineExpansion(formula)
+            result.replaceSubrange(range.lowerBound..<closingRange.upperBound, with: replacement)
         }
 
         return result
+    }
+
+    private func prettifyMathSourceWithoutInlineExpansion(_ value: String) -> String {
+        var result = replaceFractions(in: value)
+        result = replaceTextCommands(in: result)
+        result = replaceMathCommands(in: result)
+
+        return result
+            .replacingOccurrences(of: #"\^\{([^{}]+)\}"#, with: "^$1", options: .regularExpression)
+            .replacingOccurrences(of: #"_\{([^{}]+)\}"#, with: "_$1", options: .regularExpression)
+            .replacingOccurrences(of: #"([A-Za-z0-9)])\s*mod\s*\{([^}]+)\}"#, with: "$1 mod $2", options: .regularExpression)
+            .replacingOccurrences(of: #"\{([^{}]+)\}"#, with: "$1", options: .regularExpression)
             .replacingOccurrences(of: #" {2,}"#, with: " ", options: .regularExpression)
             .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func replaceMathCommands(in value: String) -> String {
+        let replacements: [(String, String)] = [
+            ("\\rightarrow", "→"),
+            ("\\varphi", "φ"),
+            ("\\lambda", "λ"),
+            ("\\approx", "≈"),
+            ("\\infty", "∞"),
+            ("\\times", "×"),
+            ("\\equiv", "≡"),
+            ("\\notin", "∉"),
+            ("\\delta", "δ"),
+            ("\\theta", "θ"),
+            ("\\omega", "ω"),
+            ("\\alpha", "α"),
+            ("\\gamma", "γ"),
+            ("\\right", ""),
+            ("\\cdot", "·"),
+            ("\\pmod", "mod"),
+            ("\\bmod", "mod"),
+            ("\\left", ""),
+            ("\\beta", "β"),
+            ("\\phi", "φ"),
+            ("\\Phi", "Φ"),
+            ("\\leq", "≤"),
+            ("\\geq", "≥"),
+            ("\\neq", "≠"),
+            ("\\neg", "¬"),
+            ("\\div", "÷"),
+            ("\\mod", "mod"),
+            ("\\gcd", "gcd"),
+            ("\\to", "→"),
+            ("\\pm", "±"),
+            ("\\le", "≤"),
+            ("\\ge", "≥"),
+            ("\\ne", "≠"),
+            ("\\mu", "μ"),
+            ("\\pi", "π"),
+            ("\\in", "∈"),
+            ("\\,", " "),
+            ("\\;", " "),
+            ("\\:", " "),
+            ("\\ ", " ")
+        ]
+
+        var result = value
+        for (target, replacement) in replacements.sorted(by: { $0.0.count > $1.0.count }) {
+            result = result.replacingOccurrences(of: target, with: replacement)
+        }
+        return result
     }
 
     private func replaceFractions(in value: String) -> String {

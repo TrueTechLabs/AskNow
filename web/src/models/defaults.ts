@@ -56,6 +56,7 @@ export const DEFAULT_MODEL_PROFILE: ModelProfile = {
 
 export const DEFAULT_SETTINGS: Settings = {
   language: 'system',
+  theme: 'light',
   defaultTemperature: 0.7,
   defaultContextTurns: 6,
   maxTokens: 8192,

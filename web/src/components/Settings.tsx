@@ -18,8 +18,8 @@ export default function SettingsPanel({ onClose }: Props) {
   const [tab, setTab] = useState<'general' | 'profiles' | 'modes'>('general')
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl w-full max-w-md max-h-[85vh] flex flex-col overflow-hidden shadow-xl">
+    <div className="asknow-settings-overlay fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
+      <div className="asknow-settings-panel bg-white rounded-xl w-full max-w-md max-h-[85vh] flex flex-col overflow-hidden shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
           <h2 className="text-sm font-semibold text-gray-900">{t('settings', lang)}</h2>

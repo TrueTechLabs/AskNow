@@ -53,7 +53,7 @@ final class AssistantPanelController: NSObject {
         let hosting = NSHostingController(rootView: rootView)
         let panel = AskNowPanel(
             contentRect: NSRect(origin: .zero, size: Self.compactSize),
-            styleMask: [.titled, .closable, .resizable, .fullSizeContentView, .nonactivatingPanel],
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView, .nonactivatingPanel],
             backing: .buffered,
             defer: false
         )

@@ -1,4 +1,5 @@
 export type AppLanguage = 'system' | 'chinese' | 'english'
+export type AppTheme = 'light' | 'dark'
 
 export interface ChatMessage {
   id: string
@@ -44,6 +45,7 @@ export interface Conversation {
 
 export interface Settings {
   language: AppLanguage
+  theme: AppTheme
   defaultTemperature: number
   defaultContextTurns: number
   maxTokens: number
